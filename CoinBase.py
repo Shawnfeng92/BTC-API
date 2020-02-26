@@ -1,13 +1,15 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Feb 26 8:59:02 2020
+
+@author: Shawn
+"""
+
+
 import time
 import requests
 import pandas as pd
-from datetime import datetime
-
-
-def isotoepochms(t8601="2017-01-02T18:56:01.785Z"):
-    t8601 = datetime.strptime(t8601, "%Y-%m-%dT%H:%M:%S.%fZ")
-    delta = t8601 - datetime(1970, 1, 1)
-    return int(delta.total_seconds()) * 1000 + int(delta.microseconds / 1000)
+import TimeConvert as TC
 
 
 def orders(
@@ -29,7 +31,7 @@ def orders(
     end = requests.get(baseURL).json()[0]["trade_id"]
     mid = requests.get(baseURL + f"?after={int((start + end) / 2) + 1}").json()[0]
     time.sleep(0.67)
-
+    print("Searching order...")
     while start < end:
         if mid["time"] == tradeTime:
             break
@@ -49,15 +51,17 @@ def orders(
 
 def tradeHistory(
     product="BTC-USD",
-    startTime="2017-01-02T18:56:01.785Z",
+    startTime="2017-01-01T18:56:01.785Z",
     endTime="2017-01-02T19:09:31.97Z",
 ):
     baseURL = f"https://api.pro.coinbase.com/products/{product}/trades"
     result = orders(product, startTime, direction="after", limit=100)
+    print("Downloading data...")
     time.sleep(0.34)
 
     IDstamp = result[0]["trade_id"] + 1
     timestamp = result[0]["time"]
+
     while timestamp < endTime:
         IDstamp += 100
         result = requests.get(baseURL + f"?after={IDstamp}").json() + result
@@ -89,6 +93,10 @@ def currencyPrice(product="BTC", tradeTime="2017-01-02T18:56:01.785Z"):
 
 def rawDataStore(data, filepath="Sample.csv"):
     data = pd.DataFrame(data)[["time", "side", "price", "size", "trade_id"]]
-    data["Epoch ms"] = data["time"].map(isotoepochms)
+    data["Epoch(ms)"] = data["time"].map(TC.isotoepochms)
+    data["time"] = data["Epoch(ms)"].map(TC.epochmstoiso)
     data.to_csv(filepath, index=False)
 
+
+sample = tradeHistory()
+rawDataStore(sample)
