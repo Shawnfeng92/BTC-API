@@ -13,7 +13,7 @@ import TimeConvert as TC
 
 def tradeHistory(
     product="btcusd",
-    startTime="2020-02-20T20:49:52.130Z",
+    startTime="2020-02-21T02:49:52.130Z",
     endTime="2020-02-26T20:49:52.130Z",
 ):
     baseURL = f"https://api.gemini.com/v1/trades/{product}?timestamp="

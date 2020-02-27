@@ -43,7 +43,10 @@ def candlegraph(filepath="Sample.csv", title="Sample"):
         temp = df.loc[
             (df["epoch(ms)"] >= time_point[i]) & (df["epoch(ms)"] < time_point[i + 1])
         ]
-        df_vwap.append(sum(temp["price"] * temp["size"]) / sum(temp["size"]))
+        if sum(temp["size"]):
+            df_vwap.append(sum(temp["price"] * temp["size"]) / sum(temp["size"]))
+        else:
+            df_vwap.append(0)
         df_nv.append(sum(temp["price"] * temp["size"]))
 
     # create canvas fig and two subplots ax and ax2
@@ -123,4 +126,3 @@ def candlegraph(filepath="Sample.csv", title="Sample"):
 
 
 candlegraph()
-W
