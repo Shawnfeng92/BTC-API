@@ -13,8 +13,8 @@ import TimeConvert as TC
 
 def tradeHistory(
     product="btcusd",
-    startTime="2020-02-23T18:56:01.785Z",
-    endTime="2020-02-25T19:09:31.97Z",
+    startTime="2020-02-20T20:49:52.130Z",
+    endTime="2020-02-26T20:49:52.130Z",
 ):
     baseURL = f"https://api.gemini.com/v1/trades/{product}?timestamp="
     startTime = TC.isotoepochms(startTime) // 1000
@@ -38,7 +38,8 @@ def rawDataStore(data, filepath="Sample.csv"):
     data = pd.DataFrame(data)
     data["time"] = data["timestampms"].map(TC.epochmstoiso)
     data = data[["time", "type", "price", "amount", "tid", "timestampms"]]
-    data.columns = ["Time", "Side", "Price", "Size", "TradeID", "Epoch(ms)"]
+    data.columns = ["time", "side", "price", "size", "tradeID", "epoch(ms)"]
+    
     data.to_csv(filepath, index=False)
 
 

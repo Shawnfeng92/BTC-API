@@ -95,7 +95,7 @@ def rawDataStore(data, filepath="Sample.csv"):
     data = pd.DataFrame(data)[["time", "side", "price", "size", "trade_id"]]
     data["Epoch(ms)"] = data["time"].map(TC.isotoepochms)
     data["time"] = data["Epoch(ms)"].map(TC.epochmstoiso)    
-    data.columns = ["Time", "Side", "Price", "Size", "TradeID", "Epoch(ms)"]
+    data.columns = ["time", "side", "price", "size", "tradeID", "epoch(ms)"]
 
     data.to_csv(filepath, index=False)
 

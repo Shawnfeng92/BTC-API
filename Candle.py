@@ -35,13 +35,13 @@ def candlegraph(filepath="Sample.csv", title="Sample"):
     df_vwap = []
     df_nv = []
 
-    starttime = df["Epoch(ms)"][-1] // 3600000 * 3600000
-    endtime = df["Epoch(ms)"][0] // 3600000 * 3600000 + 3600001
+    starttime = df["epoch(ms)"][-1] // 3600000 * 3600000
+    endtime = df["epoch(ms)"][0] // 3600000 * 3600000 + 3600001
 
     time_point = range(starttime, endtime, 3600000)
     for i in range(len(time_point) - 1):
         temp = df.loc[
-            (df["Epoch(ms)"] >= time_point[i]) & (df["Epoch(ms)"] < time_point[i + 1])
+            (df["epoch(ms)"] >= time_point[i]) & (df["epoch(ms)"] < time_point[i + 1])
         ]
         df_vwap.append(sum(temp["price"] * temp["size"]) / sum(temp["size"]))
         df_nv.append(sum(temp["price"] * temp["size"]))
@@ -123,3 +123,4 @@ def candlegraph(filepath="Sample.csv", title="Sample"):
 
 
 candlegraph()
+W
